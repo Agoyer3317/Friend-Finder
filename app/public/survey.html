@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="https://code.jquery.com/jquery.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+  <title>Survey</title>
+</head>
+<body>
+    <!-- <div class='match'></div> -->
+  <h2>Survey</h2>
+
+  <form action="/action_page.php" id="questions">
+    Name<br>
+    <input type="text" name="name" id="nameID" value="Mickey">
+    <br>
+    Link to Photo Image (required) <br>
+    <input type="text" name="photo" id="photoID" value="Mouse">
+    <br><br>
+  </form> 
+  
+  <!-- results from survey -->
+  <div class='match'></div>
+
+
+  <!-- ..jquery -->
+  <script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+  <script>
+  let questions = [{
+    testQuestion: "Can you change a flat tire.",
+    Answers: [1, 2, 3, 4, 5]
+},
+{
+    testQuestion: "You like a clean house.",
+    Answers: [1,2,3,4,5]
+},
+{
+    testQuestion: "You are not a dumbass.",
+    Answers: [1,2,3,4,5]
+}, 
+{
+    testQuestion: "You like to gamble.",
+    Answers: [1,2,3,4,5]
+},
+{
+    testQuestion: "You like to drink alcohol.",
+    Answers: [1,2,3,4,5]
+},
+{
+    testQuestion: "Your goal is to be on Disability one day.",
+    Answers: [1,2,3,4,5]
+}
+]
+
+// three question, no corroect answers, answers = 1,2,3,4,5
+
+let start = () => {
+    //for loop for the question
+    for (let i = 0; i < questions.length; i++) {
+        console.log(questions[i].testQuestion);
+        $('#questions').append('<div class="question-css" id="question' + i + '" data-answer="' + questions[i].CorrectAnswer + '">' + questions[i].testQuestion + '</div>')
+        $('#questions').append('<br>')
+        
+        //for loop for answers
+        let answersArray = questions[i].Answers;
+        for (let j = 0; j < answersArray.length; j++) {
+            $('#question' + i).append('<br>')
+            $('#question' + i).append('<input class="answer-css" name="answer' + i + '" type="radio" value="' + answersArray[j]+'">')
+            $('#question' + i).append(answersArray[j])
+
+            // <input type="text" name="firstname" value="Mickey">
+
+            $('#question' + i).append('<br>')
+        }
+        $('#questions').append('<br>')
+
+    }//for loop ends
+    $('#questions').append('<input type="submit" value="Submit">')
+};//end start function
+
+start();
+
+$('#questions').on('submit', function(event) {
+    event.preventDefault()
+    tallyScores();
+});//closes submit
+
+let tallyScores = () => {
+  let surveyAnswers = {
+      photo: $('#photoID').val().trim(),
+      score: [],
+      name: $('#nameID').val().trim()
+    };
+      
+    for (let i = 0; i < questions.length; i++) {
+        let answerSelected = ($('input[name="answer' + i + '"]:checked').val());
+        surveyAnswers.score.push(answerSelected);
+     }//closes forloop
+     console.log(surveyAnswers);
+
+// surveyAnsers being set to the back end (apiRoutes.js)
+    $.ajax({
+    url: "/friends",
+    method: "POST",
+    data: surveyAnswers
+}).then(function(data){
+    $('#questions').hide();
+    $('.match').append(data.name);
+    $('.match').append(data.photo);
+ 
+
+    console.log('data from survey.html' + data);
+})
+
+}//closes tallyscores
+
+  </script>
+</body>
+</html>
