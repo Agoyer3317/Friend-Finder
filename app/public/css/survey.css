@@ -1,0 +1,41 @@
+/* Basically needed, it stops the browser from being stupid with padding and margin */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Resets padding and margin for the `html` and `body` tags */
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#nameID,
+#photoID,
+label {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.question-css,
+.questions {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.answer-css {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 100px;
+}
+
+.question-css > label {
+  font-weight: normal;
+}
+
+#results {
+  display: none;
+}
